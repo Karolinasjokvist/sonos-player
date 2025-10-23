@@ -105,6 +105,7 @@
     <h1>Sonos Ip Adress</h1>
 
     <input type="text" id="ip" placeholder="Put a Sonos Ip Address here">
+    <button id="branasgatan">Branäsgatan</button>
 
     <h1>Send Spotify Track to Shortcut</h1>
 
@@ -200,6 +201,10 @@
                 
 
                 document.getElementById("songName").textContent = "";
+            });
+
+            document.getElementById("branasgatan").addEventListener("click", (e) => {
+                document.getElementById("ip").value = "192.168.86.30"
             });
 
             document.getElementById("revealBtn").addEventListener("click", () => {
