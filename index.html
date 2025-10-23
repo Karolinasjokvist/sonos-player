@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Send Spotify ID to Shortcut</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            width: 100svw;
+            height: 100svh;
+            padding: 2rem 1rem;
+            text-align: center;
+            background: #f9f9f9;
+            position: relative;
+        }
+
+        h1 {
+            margin-bottom: 80px;
+            font-size: 60px;
+        }
+
+        input {
+            width: 80%;
+            padding: 12px 14px;
+            font-size: 50px;
+            /* prevents iOS zoom */
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 80%;
+            padding: 14px;
+            font-size: 50px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            background-color: #313131;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-bottom: 40px;
+        }
+
+        #runBtn:active {
+            background-color: #169c45;
+        }
+
+        #runBtn:disabled {
+            opacity: 0.2;
+            background-color: gray;
+        }
+
+        #shortcut {
+            position: absolute;
+            bottom: 10px;
+            left: 20%;
+            right: 20%;
+            width: unset;
+            background-color: #ae00ff;
+        }
+
+        #shortcut:active {
+            background-color: #8f00d1;
+        }
+
+        #runBtn {
+            margin-bottom: 80px;
+            background-color: #1DB954;
+        }
+
+        #revealSection {
+            margin-top: 1rem;
+            display: none;
+        }
+        #songName {
+            margin-top: 0.5rem;
+            font-size: 60px;
+            font-weight: 500;
+        }
+
+        #ip{
+            margin-bottom: 80px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #121212;
+                color: white;
+            }
+
+            input {
+                background: #1c1c1e;
+                color: white;
+                border-color: #333;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Sonos Ip Adress</h1>
+
+    <input type="text" id="ip" placeholder="Put a Sonos Ip Address here">
+
+    <h1>Send Spotify Track to Shortcut</h1>
+
+    <input type="text" id="spotifyLink" placeholder="Paste a Spotify track link here">
+    <button id="runBtn">Send to Shortcut</button>
+
+    <h1>Quick Test</h2>
+    <button id="random">Random Song!</button>
+
+        
+    <button class="button" id="revealBtn">👀 Reveal Song Name</button>
+    <div id="songName"></div>
+    
+
+    <button id="shortcut" onclick="window.open('https://www.icloud.com/shortcuts/ddd61addee3a4d49927d5de23d130cf0', '_blank')">
+        ➕ Add My Shortcut
+      </button>
+      
+
+        <script>
+            const songs = [
+                // 1980s
+                { title: "Billie Jean – Michael Jackson", link: "https://open.spotify.com/track/3S2R0EVwBSAVMd5UMgKTL0" },
+                { title: "Sweet Child O’ Mine – Guns N’ Roses", link: "https://open.spotify.com/track/7o2CTH4ctstm8TNelqjb51" },
+                { title: "Take On Me – a-ha", link: "https://open.spotify.com/track/2WfaOiMkCvy7F5fcp2zZ8L" },
+                { title: "Livin’ on a Prayer – Bon Jovi", link: "https://open.spotify.com/track/37ZJ0p5Jm13JPevGcx4SkF" },
+                { title: "Don’t Stop Believin’ – Journey", link: "https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC" },
+                { title: "Africa – Toto", link: "https://open.spotify.com/track/2374M0fQpWi3dLnB54qaLX" },
+                { title: "Every Breath You Take – The Police", link: "https://open.spotify.com/track/1JSTJqkT5qHq8MDJnJbRE1" },
+
+                // 1990s
+                { title: "Smells Like Teen Spirit – Nirvana", link: "https://open.spotify.com/track/5ChkMS8OtdzJeqyybCc9R5" },
+                { title: "Wonderwall – Oasis", link: "https://open.spotify.com/track/7ygpwy2qP3NbrxVkHvUhXY" },
+                { title: "Losing My Religion – R.E.M.", link: "https://open.spotify.com/track/3qyJf1h5X2x6xZ6b3nhF8Q" },
+                { title: "No Scrubs – TLC", link: "https://open.spotify.com/track/1QEEqeFIZktqIpPI4jSVSF" },
+                { title: "Killing Me Softly – The Fugees", link: "https://open.spotify.com/track/2hKdd3qO7cWr2Jo0Bcs0MA" },
+                { title: "Enter Sandman – Metallica", link: "https://open.spotify.com/track/5sICkBXVmaCQk5aISGR3x1" },
+                { title: "Wannabe – Spice Girls", link: "https://open.spotify.com/track/1Je1IMUlBXcx1Fz0WE7oPT" },
+                { title: "Creep – Radiohead", link: "https://open.spotify.com/track/70LcF31zb1H0PyJoS1Sx1r" },
+
+                // 2000s
+                { title: "Hey Ya! – OutKast", link: "https://open.spotify.com/track/0bYg9bo50gSsH3LtXe2SQn" },
+                { title: "Mr. Brightside – The Killers", link: "https://open.spotify.com/track/0eGsygTp906u18L0Oimnem" },
+                { title: "Seven Nation Army – The White Stripes", link: "https://open.spotify.com/track/3dPQuX8Gs42Y7b454ybpMR" },
+                { title: "Crazy – Gnarls Barkley", link: "https://open.spotify.com/track/1VzM3MmRZcRzCkY1Oi9smo" },
+                { title: "Boulevard of Broken Dreams – Green Day", link: "https://open.spotify.com/track/5GorFaKkP2mLREQvhSblIg" },
+                { title: "Umbrella – Rihanna ft. Jay-Z", link: "https://open.spotify.com/track/49FYlytm3dAAraYgpoJZux" },
+                { title: "In the End – Linkin Park", link: "https://open.spotify.com/track/60a0Rd6pjrkxjPbaKzXjfq" },
+                { title: "Viva La Vida – Coldplay", link: "https://open.spotify.com/track/1mea3bSkSGXuIRvnydlB5b" },
+
+                // 2010s
+                { title: "Rolling in the Deep – Adele", link: "https://open.spotify.com/track/1c8gk2PeTE04A1pIDH9YMk" },
+                { title: "Uptown Funk – Mark Ronson ft. Bruno Mars", link: "https://open.spotify.com/track/32OlwWuMpZ6b0aN2RZOeMS" },
+                { title: "Shape of You – Ed Sheeran", link: "https://open.spotify.com/track/7qiZfU4dY1lWllzX7mPBI3" },
+                { title: "Blinding Lights – The Weeknd", link: "https://open.spotify.com/track/0VjIjW4GlUZAMYd2vXMi3b" },
+                { title: "Get Lucky – Daft Punk ft. Pharrell Williams", link: "https://open.spotify.com/track/69kOkLUCkxIZYexIgSG8rq" },
+                { title: "Somebody That I Used to Know – Gotye", link: "https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC" },
+                { title: "Happy – Pharrell Williams", link: "https://open.spotify.com/track/6NPVjNh8Jhru9xOmyQigds" },
+                { title: "Bad Guy – Billie Eilish", link: "https://open.spotify.com/track/2Fxmhks0bxGSBdJ92vM42m" }
+            ];
+
+            const shortcutName = "Play My Sonos Track"; // ← change this to your shortcut name
+
+            document.getElementById("runBtn").addEventListener("click", () => {
+                const link = document.getElementById("spotifyLink").value.trim();
+
+                run(link)
+
+                document.getElementById("spotifyLink").value = ""
+            });
+            let currentSong = JSON.parse(localStorage.getItem("currentSong"))||null;
+            let ip = localStorage.getItem("ip")||null;
+            document.getElementById("ip").value = ip
+            if(ip == null){
+                document.getElementById("runBtn").disabled = true; 
+                document.getElementById("random").disabled = true; 
+            }
+
+            document.getElementById("ip").addEventListener("change", (e) => {
+                ip = e.target.value.trim();   
+                localStorage.setItem("ip", ip)
+                document.getElementById("runBtn").disabled = false; 
+                document.getElementById("random").disabled = false; 
+            });
+
+            // All predefined buttons (delegated listener)
+            document.getElementById("random").addEventListener("click", (e) => {
+                const random = songs[Math.floor(Math.random() * songs.length)];
+                currentSong = random;
+                localStorage.setItem("currentSong", JSON.stringify(currentSong))
+                run(random.link);
+                
+                
+
+                document.getElementById("songName").textContent = "";
+            });
+
+            document.getElementById("revealBtn").addEventListener("click", () => {
+                if (currentSong) {
+                    document.getElementById("songName").textContent = currentSong.title;
+                }
+            });
+
+            function run(link) {
+                if (!link) return alert("Please paste a Spotify track link.");
+
+                // Extract track ID from Spotify link
+                // Example: https://open.spotify.com/track/6wkYQMrFfb0huLB5Qn19Iv?si=XXXX
+                const match = link.match(/spotify\.com\/track\/([a-zA-Z0-9]+)/);
+                if (!match) return alert("That doesn’t look like a valid Spotify track link.");
+
+                const trackId = match[1];
+                const combined = encodeURIComponent(`${ip}|${trackId}`);
+                // Encode everything for URL safety
+                const shortcutUrl = `shortcuts://run-shortcut?name=${encodeURIComponent(shortcutName)}&input=${combined}`;
+
+                // Redirect to the shortcut
+                window.location.href = shortcutUrl;
+            }
+
+        </script>
+
+</body>
+
+</html>
