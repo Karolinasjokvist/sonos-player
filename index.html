@@ -206,7 +206,7 @@
             document.getElementById("branasgatan").addEventListener("click", (e) => {
                 document.getElementById("ip").value = "192.168.86.30"
                 const event = new Event("change", { bubbles: true });
-                ipInput.dispatchEvent(event);
+                document.getElementById("ip").dispatchEvent(event);
             });
 
             document.getElementById("revealBtn").addEventListener("click", () => {
